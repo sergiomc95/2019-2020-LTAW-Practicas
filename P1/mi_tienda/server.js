@@ -1,6 +1,7 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
+var active = false;
 
 //-- Configurar y lanzar el servidor. Por cada peticion recibida
 //-- se imprime un mensaje en la consola
@@ -16,18 +17,21 @@ http.createServer((req, res) => {
   var filename = ""
 
   //-- Obtener fichero a devolver
-  if (q.pathname == "/")
+  if (q.pathname == "/"){
     filename += "/index.html"
-  else {
-      filename = q.pathname
-    }
-
+  }
+  else if (q.pathname == "/puerta-trasera/ls"){
+    console.log("LO QUE PIDE OBIJUAN")
+    return res.end("file:///C:/Users/alldocube/github/2019-2020-LTAW-Practicas/P1/mi_tienda/");
+    //file:///C:/Users/alldocube/github/2019-2020-LTAW-Practicas/P1/mi_tienda/
+  }else{
+    filename = q.pathname;
+  }
 
     tipo = filename.split(".")[1]
     //-- Obtener el nombre del fichero a partir del recurso solicitado
     //-- Se añade un . delante
     filename = "." + filename
-
 
       console.log("Filename: " + filename)
       console.log("Tipo: " + tipo)
