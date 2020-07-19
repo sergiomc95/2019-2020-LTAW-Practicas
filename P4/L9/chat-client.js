@@ -25,10 +25,8 @@ socket.on('msg', (msg) => {
   //-- Añadirlo al párrafo display
   display.innerHTML += "<br> > " + msg;
 });
-
 //-- Botón de envío apretado
 send.onclick = () => {
-
   //-- Se envía el mensaje escrito
   //-- Usamos el nombre 'msg' para los mensajes de usuario
   //-- Si no se ha introducido ningún mensaje, no se envía
