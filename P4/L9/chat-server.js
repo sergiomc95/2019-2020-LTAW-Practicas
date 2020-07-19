@@ -10,6 +10,8 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 //-- Puerto donde lanzar el servidor
 const PORT = 8080
+
+var usuarios = 0;
 //-- Lanzar servidor
 http.listen(PORT, function(){
   console.log('Servidor lanzado en puerto ' + PORT);
@@ -38,6 +40,7 @@ app.use('/', express.static(__dirname +'/'));
 //-- Un nuevo cliente se ha conectado!
 io.on('connection', function(socket){
 
+usuarios = usuarios + 1;
   //-- Usuario conectado. Imprimir el identificador de su socket
   console.log('--> Usuario conectado!. Socket id: ' + socket.id);
 
@@ -51,10 +54,35 @@ io.on('connection', function(socket){
 
     //-- Enviar el mensaje a TODOS los clientes que estén conectados
     io.emit('msg', msg);
+
+
+      if (msg === '/help') {
+             console.log("funciona");
+               msg = '<br>' + '/help:' + '<br>'+ 'Mostrará una lista con todos los comandos soportados'
+                     +'<br>' + '/list:' + '<br>'+ 'Devolverá el número de usuarios conectados'
+                     +'<br>' + '/hello:' + '<br>'+ 'El servidor nos devolverá el saludo'
+                     +'<br>' + '/date:' + '<br>'+ 'Nos devolverá la fecha'
+               socket.emit('msg', msg);
+           }else if (msg === '/list') {
+             console.log(usuarios + "numero de usuarios%");
+              msg = 'Usuarios conectados: ' + usuarios
+              socket.emit('msg', msg);
+           }else{
+             console.log("entrandooo");
+             io.emit('msg', msg);
+           }
+
+
+
+
+
   })
+
+
 
   //-- Usuario desconectado. Imprimir el identificador de su socket
   socket.on('disconnect', function(){
+    usuarios = usuarios - 1;
     console.log('--> Usuario Desconectado. Socket id: ' + socket.id);
   });
 });
